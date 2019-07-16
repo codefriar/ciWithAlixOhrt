@@ -1,25 +1,4 @@
-## Promises Redux.
-When I first released the Promise library, there was a small bug. Apex wasn't reseting the DML context between promise steps. To get around this, Promise fired off each promise step through an @future method. This worked around the problem, but it did have an impact on execution time. Salesforce resolved this issue in winter '17. In repsonse, I spent some time refactoring the library. Today I'm happy to announce Promises 2.0; the AwesomeSauce edition.
-
-## The good (what changed?)
-The library no longer executes promise steps via an @future method. This can have a dramatic, positive, effect on execution times. The first version required promises to accept and return JSON Serializable objects. This new version, no longer requires anything more specific than an Object. You can pass around and return sObjects, primitives, and custom Apex objects. The biggest refactor comes from naming conventions. I established two classes in the first version: PromiseBase and Promise. I've refactored away the need for PromiseBase. Now the library, apart from examples and tests, is a single class. Additionally, I'd received some feedback suggesting 'promiseStep' needed a better name. After some discussion with other developers, I settled on 'Deferred'. Classes implementing the Deferred interface execute code via Queueable Apex. Because of this, the system defers their execution until it has resources.
-
-## The bad (Sorry, I made a few breaking changes)
-The refactoring I mentioned above meant that the API has changed. V1 and V2 are not compatible with each other. Yet, the gains provided by the changes justify the need to refactor existing promise code. To migrate to version 2, you'll need to do two things:
-
-* Change the interface your promise classes use. From Promise.PromiseStep to Promise.deferred.</li>
-* Remove references to SerializableData. Either by passing specific object types, or by accepting and returning generic Objects
-
-Below is a full example class that uses promises v2.0 - _AwesomeSauce Edition_
-
-```apex
-/**
- * Promise v2.0 - Kevin Poorman
- * Thanks to Chuck Jonas!
- * This class exists to demonstrate the usage of the Promise library.
- *
- */
-Public Class Demo_PromiseUse {
+Public Class PromiseDemo {
   // This execute method optionally accepts a string param that is used to pass data into
   // the intial promise step.
   Public Void execute(String param) {
@@ -62,6 +41,13 @@ Public Class Demo_PromiseUse {
       .execute();
   }
 
+  //   ____        __                        _  ____ _
+  //  |  _ \  ___ / _| ___ _ __ _ __ ___  __| |/ ___| | __ _ ___ ___  ___ ___
+  //  | | | |/ _ \ |_ / _ \ '__| '__/ _ \/ _` | |   | |/ _` / __/ __|/ _ \ __|
+  //  | |_| |  __/  _|  __/ |  | | |  __/ (_| | |___| | (_| \__ \__ \  __\__ \
+  //  |____/ \___|_|  \___|_|  |_|  \___|\__,_|\____|_|\__,_|___/___/\___|___/
+  //
+
   Public Class Demo_PromiseStep implements Promise.Deferred {
 
     @TestVisible
@@ -71,6 +57,8 @@ Public Class Demo_PromiseUse {
       // Do some aysnchronous work, in this case, we'll pretend it's in
       // our helper method:
       checkInteger = exampleHelperMethod();
+      // Your return value just be serializable as JSON, and you have to pass
+      // both the object, and it's class
       return checkInteger;
     }
 
@@ -112,6 +100,8 @@ Public Class Demo_PromiseUse {
       }
 
       slowAsyncWork = exampleHelperMethod();
+      // Your return value just be serializable as JSON, and you have to pass
+      // both the object, and it's class
       return slowAsyncWork;
     }
 
@@ -121,6 +111,13 @@ Public Class Demo_PromiseUse {
     }
 
   }
+
+  //   _   _                 _ _            ____ _
+  //  | | | | __ _ _ __   __| | | ___ _ __ / ___| | __ _ ___ ___  ___ ___
+  //  | |_| |/ _` | '_ \ / _` | |/ _ \ '__| |   | |/ _` / __/ __|/ _ \ __|
+  //  |  _  | (_| | | | | (_| | |  __/ |  | |___| | (_| \__ \__ \  __\__ \
+  //  |_| |_|\__,_|_| |_|\__,_|_|\___|_|   \____|_|\__,_|___/___/\___|___/
+  //
 
   public class Demo_PromiseDone implements Promise.Done {
     // This is used to demonstrate the use of a class instance var populated by a constructor
@@ -175,8 +172,3 @@ Public Class Demo_PromiseUse {
   }
   
 }
-```
-
-## Straight up now tell me, if you're using this lib!
-Since I released the library I've talked to many developers who are using it. They've discovered a few new use cases that I'd not thought of. For instance, one developer is using Promises in Sandbox startup scripts. This helps his company ensure the order of sandbox data creation. They have many address validations, callouts and integrations during the creation of accounts. Creating those accounts, and processing the integrations must finish first. Until then, creating dependent objects will fail. Another developer is using promises to automate a SAAS company's billing. Harnessing promises, she was able to write a single chain of steps. Promises enables them to retry callout steps when an integration stops responding. Steps exist to create a case when the payment processor declines a card. When finished, the process sends the customer an receipt. Super cool. If you're using Promise, or have an interesting use case for promises, drop me a line.
-
