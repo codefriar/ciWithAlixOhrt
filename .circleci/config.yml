@@ -25,7 +25,7 @@ jobs:
           name: Create dev hub key
           command: |
             echo 'make hub key'
-            openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out assets/server.key -base64 -K $DECRYPTION_KEY -iv $DECRYPTION_IV
+            openssl enc -nosalt -aes-256-cbc -d -in $ENCODED_SERVER_KEY -out assets/server.key -base64 -K $DECRYPTION_KEY -iv $DECRYPTION_IV
             #- openssl rsa -in keys/hub.key -check -noout
             ### Uncomment the following if performing deployments
             #- echo 'make deploy key'
