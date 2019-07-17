@@ -4,17 +4,47 @@ jobs:
     docker:
       - image: debian:stretch
 
+    environment:
+      - DX_CLI_URL: https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+
     steps:
       - checkout
 
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: Download SFDX CLI
+          command: |
+            mkdir sfdx
+            wget -qO- $DX_CLI_URL | tar xJ -C sfdx --strip-components 1
 
       - run:
-          name: Print the Current Time
-          command: date
+          name: Install SFDX CLI
+          command: |
+            ./sfdx/install
+            sfdx
+            mkdir tmp
 
       - run:
-          name: Hello Streamers
-          command: echo Hello Streamers.
+          name: Create dev hub key
+          command: |
+            openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out assets/server.key -base64 -K $DECRYPTION_KEY -iv $DECRYPTION_IV 
+
+      - run:
+          name: Setup Org
+          command: |
+            sfdx force:auth:jwt:grant --clientid $HUB_CONSUMER_KEY --jwtkeyfile assets/server.key --username $HUB_SFDC_USER --setdefaultdevhubusername -a hub
+            sfdx force:org:create -s -f ~/ci_app/config/project-scratch-def.json -a circle_build_$CIRCLE_BUILD_NUM --wait 3
+            sfdx force:source:push -u circle_build_$CIRCLE_BUILD_NUM
+
+      - run:
+          name: Run Apex Tests
+          command: |
+            mkdir -p ~/junit
+            sfdx force:apex:test:run -c -d ~/junit -r junit --wait 5 -u circle_build_$CIRCLE_BUILD_NUM
+
+      - store_test_results:
+          path: ~/junit
+
+      - run:
+          name: Delete Useless Scratch Org
+          command: |
+            sfdx force:org:delete -u circle_build_$CIRCLE_BUILD_NUM -p
