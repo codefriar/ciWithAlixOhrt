@@ -35,10 +35,10 @@ private class PromiseDemoTests {
     system.assertNotEquals(null, match, 'Match should exist');
   }
 
-  static testMethod void test_Demo_PromiseDone() {
-    PromiseDemo.Demo_PromiseDone p = new PromiseDemo.Demo_PromiseDone();
-    system.assertNotEquals(null, p, 'expected p to be a valid object');
-  }
+  // static testMethod void test_Demo_PromiseDone() {
+  //   PromiseDemo.Demo_PromiseDone p = new PromiseDemo.Demo_PromiseDone();
+  //   system.assertNotEquals(null, p, 'expected p to be a valid object');
+  // }
 
   static testMethod void test_Demo_Done_Account_constructor(){
     Account a = new account(name='foo for test');
