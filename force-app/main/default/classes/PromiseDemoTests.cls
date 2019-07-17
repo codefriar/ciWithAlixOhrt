@@ -39,6 +39,17 @@ private class PromiseDemoTests {
   //   PromiseDemo.Demo_PromiseDone p = new PromiseDemo.Demo_PromiseDone();
   //   system.assertNotEquals(null, p, 'expected p to be a valid object');
   // }
+  
+  @IsTest
+  static void badApexNoDonut(){
+    
+    Test.startTest();
+    for(Integer i = 1; i < 155; i++){
+      List<Account> throwaway = [SELECT ID FROM Account LIMIT :i];
+    }
+    Test.stopTest();
+    
+  }
 
   static testMethod void test_Demo_Done_Account_constructor(){
     Account a = new account(name='foo for test');
