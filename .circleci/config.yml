@@ -12,17 +12,17 @@ jobs:
       - DX_CLI_URL: https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
     steps:
       - checkout
-      - run:
-          name: Download SFDX CLI
-          command: |
-            mkdir sfdx
-            wget -qO- $DX_CLI_URL | tar xJ -C sfdx --strip-components 1
-      - run:
-          name: Install SFDX CLI
-          command: |
-            ./sfdx/install
-            sfdx
-            mkdir tmp
+      # - run:
+      #     name: Download SFDX CLI
+      #     command: |
+      #       mkdir sfdx
+      #       wget -qO- $DX_CLI_URL | tar xJ -C sfdx --strip-components 1
+      # - run:
+      #     name: Install SFDX CLI
+      #     command: |
+      #       ./sfdx/install
+      #       sfdx
+      #       mkdir tmp
       - run:
           name: Create dev hub key
           command: |
