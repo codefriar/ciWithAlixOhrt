@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c370d2f00dba45248ddbc73154cafc3f)](https://www.codacy.com/app/codefriar/ciWithAlixOhrt?utm_source=github.com&utm_medium=referral&utm_content=codefriar/ciWithAlixOhrt&utm_campaign=Badge_Grade)
+
 ## Promises Redux.
 
 When I first released the Promise library, there was a small bug. Apex wasn't reseting the DML context between promise steps. To get around this, Promise fired off each promise step through an @future method. This worked around the problem, but it did have an impact on execution time. Salesforce resolved this issue in winter '17. In repsonse, I spent some time refactoring the library. Today I'm happy to announce Promises 2.0; the AwesomeSauce edition.
