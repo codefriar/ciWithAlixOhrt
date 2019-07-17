@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: atlasprof/salesforce-dx
+      - image: $DOCKER_IMG
     working_directory: ~/ci_app
     environment:
       - DX_CLI_URL: https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
@@ -32,14 +32,14 @@ jobs:
           name: Setup Org
           command: |
             sfdx force:auth:jwt:grant --clientid $HUB_CONSUMER_KEY --jwtkeyfile assets/server.key --username $HUB_SFDC_USER --setdefaultdevhubusername -a hub
-            sfdx force:org:create -s -f ~/ci_app/config/project-scratch-def.json -a circle_build_$CIRCLE_BUILD_NUM --wait 3
+            sfdx force:org:create -s -f ~/ci_app/config/project-scratch-def.json -a circle_build_$CIRCLE_BUILD_NUM --wait $WAIT_TIMEOUT
             sfdx force:source:push -u circle_build_$CIRCLE_BUILD_NUM
 
       - run:
           name: Run Apex Tests
           command: |
             mkdir -p ~/junit
-            sfdx force:apex:test:run -c -d ~/junit -r junit --wait 5 -u circle_build_$CIRCLE_BUILD_NUM
+            sfdx force:apex:test:run -c -d ~/junit -r junit --wait $WAIT_TIMEOUT -u circle_build_$CIRCLE_BUILD_NUM
 
       - store_test_results:
           path: ~/junit
