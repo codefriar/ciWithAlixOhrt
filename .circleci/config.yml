@@ -11,18 +11,18 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Download CLI
+          name: Download SFDX CLI
           command: |
             mkdir sfdx
             wget -qO- $DX_CLI_URL | tar xJ -C sfdx --strip-components 1
       - run:
-          name: Install CLI
+          name: Install SFDX CLI
           command: |
             ./sfdx/install
             sfdx
             mkdir tmp
       - run:
-          name: Create hub key
+          name: Create dev hub key
           command: |
             echo 'make hub key'
             openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out assets/server.key -base64 -K $DECRYPTION_KEY -iv $DECRYPTION_IV
