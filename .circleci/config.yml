@@ -1,20 +1,40 @@
 version: 2
 jobs:
   build:
+    machine: false
     docker:
-      - image: debian:stretch
-
+      - image: $DOCKER_IMG
+    working_directory: ~/ci_app
+    environment:
     steps:
       - checkout
 
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: Install SFDX CLI
+          command: |
+            mkdir sfdx
+            wget -qO- $DX_CLI_URL
+            tar xJ -C sfdx --strip-components 1
+            ./sfdx/install
 
       - run:
-          name: Print the Current Time
-          command: date
+          name: Create Scratch Org
+          command: |
+            openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out assets/server.key -base64 -K $DECRYPTION_KEY -iv $DECRYPTION_IV
+            sfdx force:auth:jwt:grant --clientid $HUB_CONSUMER_KEY --jwtkeyfile assets/server.key --username $HUB_SFDC_USER --setdefaultdevhubusername -a hub
+            sfdx force:org:create -s -f ~/ci_app/config/project-scratch-def.json -a circle_build_$CIRCLE_BUILD_NUM --wait 3
+            sfdx force:source:push -u circle_build_$CIRCLE_BUILD_NUM
 
       - run:
-        name: Hello Streamers
-        command: echo Hello Streamers.
+          name: Run Apex Unit Test
+          command: |
+            mkdir -p ~/junit
+            sfdx force:apex:test:run -c -d ~/junit -r junit --wait 5 -u circle_build_$CIRCLE_BUILD_NUM
+
+      - store_test_results:
+          path: ~/junit
+
+      - run:
+          name: Delete Scratch
+          command: |
+            sfdx force:org:delete -u circle_build_$CIRCLE_BUILD_NUM -p
