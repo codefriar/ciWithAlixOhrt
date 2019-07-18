@@ -3,7 +3,7 @@ jobs:
   build:
     machine: false
     docker:
-      - image: $DOCKER_IMG
+      - image: atlasprof/salesforce-dx
     working_directory: ~/ci_app
     environment:
     steps:
