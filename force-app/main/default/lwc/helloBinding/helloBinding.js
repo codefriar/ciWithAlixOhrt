@@ -8,5 +8,6 @@ export default class HelloBinding extends LightningElement {
 
   handleChange(event) {
     this.greeting = event.target.value;
+    // test
   }
 }
