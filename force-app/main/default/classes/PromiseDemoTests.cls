@@ -39,6 +39,10 @@ private class PromiseDemoTests {
   //   PromiseDemo.Demo_PromiseDone p = new PromiseDemo.Demo_PromiseDone();
   //   system.assertNotEquals(null, p, 'expected p to be a valid object');
   // }
+
+  static testMethod void intentionalFail(){
+    System.Assert(false, 'I made this fail on purpose');
+  }
   
   // @IsTest
   // static void badApexNoDonut(){
