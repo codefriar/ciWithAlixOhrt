@@ -7,6 +7,6 @@ export default class HelloBinding extends LightningElement {
   @track greeting = "World";
 
   handleChange(event) {
-    this.greeting = event.target.value
+    this.greeting = event.target.value;
   }
 }

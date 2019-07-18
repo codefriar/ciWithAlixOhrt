@@ -1,1 +1,33 @@
-{}
+{
+  "name": "ciwithalixohrt",
+  "description": "[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c370d2f00dba45248ddbc73154cafc3f)](https://www.codacy.com/app/codefriar/ciWithAlixOhrt?utm_source=github.com&utm_medium=referral&utm_content=codefriar/ciWithAlixOhrt&utm_campaign=Badge_Grade)",
+  "version": "1.0.0",
+  "main": "index.js",
+  "bin": {
+    "ciwithalixohrt": "check-version.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@salesforce/eslint-config-lwc": "^0.3.0",
+    "@salesforce/lwc-jest": "^0.5.0",
+    "eslint": "^5.16.0",
+    "husky": "^2.4.1",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.18",
+    "semver": "^6.1.1",
+    "js-yaml": ">=3.13.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codefriar/ciWithAlixOhrt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codefriar/ciWithAlixOhrt/issues"
+  },
+  "homepage": "https://github.com/codefriar/ciWithAlixOhrt#readme"
+}
