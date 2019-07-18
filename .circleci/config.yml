@@ -4,6 +4,7 @@ jobs:
     machine: true
     working_directory: ~/ci_app
     environment:
+      - DX_CLI_URL: https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
     steps:
       - checkout
 
