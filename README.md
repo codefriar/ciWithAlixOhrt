@@ -2,6 +2,8 @@
 
 ## Promises Redux.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cc4b27266fb34e01b14d70e3e805701a)](https://app.codacy.com/app/codefriar/ciWithAlixOhrt?utm_source=github.com&utm_medium=referral&utm_content=codefriar/ciWithAlixOhrt&utm_campaign=Badge_Grade_Settings)
+
 When I first released the Promise library, there was a small bug. Apex wasn't reseting the DML context between promise steps. To get around this, Promise fired off each promise step through an @future method. This worked around the problem, but it did have an impact on execution time. Salesforce resolved this issue in winter '17. In repsonse, I spent some time refactoring the library. Today I'm happy to announce Promises 2.0; the AwesomeSauce edition.
 
 ## The good (what changed?)
